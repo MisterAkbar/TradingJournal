@@ -1,0 +1,21 @@
+import Head from 'next/head'
+import Link from 'next/link'
+
+const Home = () => (
+  <div>
+    <Head>
+      <title>My Homepage</title>
+    </Head>
+    <nav>
+      <Link href="/about">
+        <a>About</a>
+      </Link>
+    </nav>
+    <main>
+      <h1>Welcome to my Homepage</h1>
+      <p>This is the homepage of my website built with Next.js</p>
+    </main>
+  </div>
+)
+
+export default Home
