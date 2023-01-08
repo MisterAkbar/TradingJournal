@@ -1,0 +1,132 @@
+import { useState } from 'react'
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  FormHelperText,
+  Button,
+  Link,
+  Flex,
+  useToast
+} from '@chakra-ui/core'
+
+const IndexPage = () => {
+  const toast = useToast()
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    passwordConfirm: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    // Validate form data
+    setErrors({})
+    if (formData.password !== formData.passwordConfirm) {
+      setErrors((errors) => ({
+        ...errors,
+        passwordConfirm: 'Passwords do not match'
+      }))
+      return
+    }
+
+    try {
+      // Submit form data to server
+      // ...
+
+      // Display success toast message
+      toast({
+        title: 'Success',
+        description: 'Your account has been created',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      })
+
+      // Clear form data
+      setFormData({
+        username: '',
+        password: '',
+        email: '',
+        passwordConfirm: ''
+      })
+    } catch (error) {
+        // Display error toast message
+        toast({
+          title: 'Error',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true
+        })
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
+  
+    return (
+      <Box p={4}>
+        <h1>Trading Website</h1>
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <FormControl isInvalid={!!errors.username}>
+            <FormLabel htmlFor="username">Username</FormLabel>
+            <Input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              isDisabled={isSubmitting}
+            />
+            <FormHelperText id="username-helper-text">
+              {errors.username}
+            </FormHelperText>
+          </FormControl>
+          <FormControl isInvalid={!!errors.password} mt={4}>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              isDisabled={isSubmitting}
+            />
+            <FormHelperText id="password-helper-text">
+              {errors.password}
+            </FormHelperText>
+          </FormControl>
+          <Button
+            mt={4}
+            variantColor="teal"
+            type="submit"
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+          >
+            Login
+          </Button>
+        </form>
+        <Flex mt={4} justifyContent="space-between">
+          <Link href="/forgot-password">Forgot password?</Link>
+          <Link href="/register">Create account</Link>
+        </Flex>
+      </Box>
+    )
+  }
+  
+  export default IndexPage
+  
